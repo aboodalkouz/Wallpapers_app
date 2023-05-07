@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wallpapers_app/view/screens/home_page.dart';
-
 import 'controller/favorites_operations.dart';
 
 void main() {

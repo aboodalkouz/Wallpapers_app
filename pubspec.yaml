@@ -31,10 +31,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  http: ^0.13.6
-  sqflite: ^2.2.8
   gallery_saver: ^2.3.2
-  
+  http: ^0.13.6
+  permission_handler: ^10.2.0
+  sqflite: ^2.2.8
 
 dev_dependencies:
   flutter_lints: ^2.0.0

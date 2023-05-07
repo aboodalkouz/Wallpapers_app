@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import '../../controller/favorites_operations.dart';
+import '../../controller/permision_handler.dart';
 
 class FullScreenPage extends StatelessWidget {
   String? imgUrl;
@@ -9,35 +10,30 @@ class FullScreenPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Future<void> downloadWallpaper(
       String wallpaperUrl, BuildContext context) async {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Downloading Started...')));
-    try {
-      var imageId = await GallerySaver.saveImage(wallpaperUrl);
-      // var imageId = await ImageDownloader.downloadImage(wallpaperUrl);
-      if (imageId == null) {
-        return;
-      }
+    var permissionResult = await requestStoragePermission();
+    if (permissionResult == 'done') {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Downloading Started...')));
+      try {
+        var imageId = await GallerySaver.saveImage(wallpaperUrl);
 
-      // var filename = await ImageDownloader.findName(imageId);
-      // var path = await ImageDownloader.findPath(imageId);
-      // var size = await ImageDownloader.findByteSize(imageId);
-      // var mimeType = await ImageDownloader.findMimeType(imageId);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Downloaded Successfully'),
-          // action: SnackBarAction(
-          //     label: 'Open',
-          //     onPressed: () {
-          //       // OpenFile.open(path);
-          //     }),
-        ),
-      );
-      print('Image Downloaded');
-    } on PlatformException catch (error) {
-      print(error);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Something Went Wrong While Downloading Image')),
-      );
+        if (imageId == null) {
+          return;
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Downloaded Successfully'),
+          ),
+        );
+        print('Image Downloaded');
+      } on PlatformException catch (error) {
+        print(error);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('Something Went Wrong While Downloading Image')),
+        );
+      }
     }
   }
 
